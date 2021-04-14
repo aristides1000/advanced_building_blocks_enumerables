@@ -37,7 +37,7 @@ module Enumerable
 
     array = []
 
-    self.my_each do |element|
+    my_each do |element|
       if yield element
         array.push(element)
       end
@@ -74,9 +74,9 @@ end
 
 friends = ['Sharon', 'Leo', 'Leila', 'Brian', 'Arun']
 
-p friends.my_select
+# friends.my_select
 
-p friends.my_select { |friend| friend == 'Brian' }
+p friends.my_select { |friend| friend == 'Leo' }
 
 # Para ejecutar este archivo en irb, debo hacer lo siguiente
 =begin
