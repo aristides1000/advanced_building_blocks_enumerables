@@ -1,7 +1,3 @@
-# https://github.com/ruby/ruby
-# https://www.ruby-lang.org/en/
-# https://ruby-doc.org/core-2.7.0/Array.html
-
 module Enumerable
   def my_each
     return self.dup unless block_given?
@@ -76,14 +72,26 @@ module Enumerable
         if yield element || !element.nil? || element == true
           return true
         end
-        # yield element
       end
     end
     false
   end
 
   def my_none?
-    # your code here
+    unless block_given?
+      my_each do |element|
+        unless element.nil? || element == false
+          return false
+        end
+      end
+    else
+      my_each do |element|
+        if yield element || !element.nil? || element == true
+          return false
+        end
+      end
+    end
+    true
   end
 
   def my_count
@@ -100,13 +108,13 @@ module Enumerable
 
 end
 
-arr = [nil]
+arr = [1, 2, 3, 4, 5]
 
-# p arr.any?
-# p arr.my_any?
+# p arr.none?
+# p arr.my_none?
 
-p arr.any? {|a| a.is_a? Integer}
-p arr.my_any? {|a| a.is_a? Integer}
+p arr.none? {|a| a.is_a? Integer}
+p arr.my_none? {|a| a.is_a? Integer}
 
 # Para ejecutar este archivo en irb, debo hacer lo siguiente
 =begin
