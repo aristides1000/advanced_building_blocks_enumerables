@@ -67,9 +67,16 @@ module Enumerable
   def my_any?
     unless block_given?
       my_each do |element|
-        if yield element
+        unless element.nil? || element == false
           return true
         end
+      end
+    else
+      my_each do |element|
+        if yield element || !element.nil? || element == true
+          return true
+        end
+        # yield element
       end
     end
     false
@@ -93,13 +100,13 @@ module Enumerable
 
 end
 
-arr = [1, 2, 3]
+arr = [nil]
 
 # p arr.any?
-# p arr.my_all?
+# p arr.my_any?
 
-# p arr.any? {|a| a % 2 == 0}
-# p arr.my_all? {|a| a.is_a? Integer}
+p arr.any? {|a| a.is_a? Integer}
+p arr.my_any? {|a| a.is_a? Integer}
 
 # Para ejecutar este archivo en irb, debo hacer lo siguiente
 =begin
