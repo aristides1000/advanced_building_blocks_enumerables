@@ -94,8 +94,28 @@ module Enumerable
     true
   end
 
-  def my_count
-    # your code here
+  def my_count(parameter = "empty")
+    unless block_given?
+      unless parameter == "empty"
+        count = 0
+        my_each do |element|
+          if element == parameter
+            count += 1
+          end
+        end
+        return count
+      else
+        return my_each.length
+      end
+    else
+      count = 0
+      my_each do |element|
+        if yield element
+          count += 1
+        end
+      end
+      return count
+    end
   end
 
   def my_map
@@ -108,13 +128,16 @@ module Enumerable
 
 end
 
-arr = [1, 2, 3, 4, 5]
+arr = [1, 2, 2, 5, 2, 2, 4]
 
-# p arr.none?
-# p arr.my_none?
+# p arr.count
+# p arr.my_count
 
-p arr.none? {|a| a.is_a? Integer}
-p arr.my_none? {|a| a.is_a? Integer}
+# p arr.count(2)
+# p arr.my_count(2)
+
+# p arr.count { |x| x % 2 == 0 }
+# p arr.my_count { |x| x % 2 == 0 }
 
 # Para ejecutar este archivo en irb, debo hacer lo siguiente
 =begin
