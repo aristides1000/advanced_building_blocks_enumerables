@@ -33,7 +33,17 @@ module Enumerable
   end
 
   def my_select
-    # your code here
+    return self.dup unless block_given?
+
+    array = []
+
+    self.my_each do |element|
+      if yield element
+        array.push(element)
+      end
+    end
+
+    array
   end
 
   def my_all?
@@ -62,12 +72,11 @@ module Enumerable
 
 end
 
-fruits = ["apple", "banana", "strawberry", "pineapple"]
+friends = ['Sharon', 'Leo', 'Leila', 'Brian', 'Arun']
 
-p fruits.my_each_with_index
+p friends.my_select
 
-fruits.my_each_with_index { |fruit, index| puts fruit if index.even? }
-
+p friends.my_select { |friend| friend == 'Brian' }
 
 # Para ejecutar este archivo en irb, debo hacer lo siguiente
 =begin
