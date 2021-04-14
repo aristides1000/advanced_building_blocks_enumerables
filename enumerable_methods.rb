@@ -47,11 +47,32 @@ module Enumerable
   end
 
   def my_all?
-    # your code here
+    unless block_given?
+      my_each do |element|
+        if element.nil? || element == false
+          return false
+        end
+      end
+    else
+      my_each do |element|
+        unless yield element || !element.nil? || element == true
+          return false
+        end
+      end
+    end
+    true
+
   end
 
   def my_any?
-    # your code here
+    unless block_given?
+      my_each do |element|
+        if yield element
+          return true
+        end
+      end
+    end
+    false
   end
 
   def my_none?
@@ -72,14 +93,16 @@ module Enumerable
 
 end
 
-friends = ['Sharon', 'Leo', 'Leila', 'Brian', 'Arun']
+arr = [1, 2, 3]
 
-# friends.my_select
+# p arr.any?
+# p arr.my_all?
 
-p friends.my_select { |friend| friend == 'Leo' }
+# p arr.any? {|a| a % 2 == 0}
+# p arr.my_all? {|a| a.is_a? Integer}
 
 # Para ejecutar este archivo en irb, debo hacer lo siguiente
 =begin
 $ irb
->> load './filename.rb'
+>> load './enumerable_methods.rb'
 =end
