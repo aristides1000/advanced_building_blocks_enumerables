@@ -2,7 +2,12 @@ module Enumerable
   def my_each
     return to_enum(:my_each) unless block_given?
 
-    element = self
+    if instance_of?(Array)
+      element = self
+    elsif instance_of?(Range) || Hash
+      element = to_a
+    end
+
     i = 0
     loop do
       yield(element[i])
