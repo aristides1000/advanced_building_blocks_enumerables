@@ -1,8 +1,6 @@
-# rubocop:disable Metrics/ModuleLength
-
 module Enumerable
   def my_each
-    return dup unless block_given?
+    return to_enum(:my_each) unless block_given?
 
     element = self
     i = 0
@@ -15,7 +13,7 @@ module Enumerable
   end
 
   def my_each_with_index
-    return dup unless block_given?
+    return to_enum(:my_each_with_index) unless block_given?
 
     element = self
     i = 0
@@ -28,7 +26,7 @@ module Enumerable
   end
 
   def my_select
-    return dup unless block_given?
+    return to_enum(:my_select) unless block_given?
 
     array = []
     my_each do |element|
@@ -37,16 +35,30 @@ module Enumerable
     array
   end
 
-  def my_all?
-    if block_given?
+  def my_all?(parameter = nil)
+    if block_given? && parameter.nil?
       my_each do |element|
         return false unless yield element || !element.nil? || element == true
       end
-    else
+    elsif !block_given? && !parameter.nil?
       my_each do |element|
-        return false if element.nil? || element == false
+        if parameter.instance_of?(Regexp)
+          return false unless self.include?(parameter)
+        else
+          return false unless self.instance_of?(Class) != parameter
+        end
+      end
+    elsif !block_given?
+      my_each do |element|
+        return false if element == false
+        return true if element.nil?
       end
     end
+=begin
+    if !block_given? && !parameter.nil?
+      
+    end
+=end
     true
   end
 
@@ -126,5 +138,3 @@ module Enumerable
     elements.my_inject { |accumulator, element| accumulator * element }
   end
 end
-
-# rubocop:enable Metrics/ModuleLength
