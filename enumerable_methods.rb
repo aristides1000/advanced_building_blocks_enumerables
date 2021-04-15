@@ -1,3 +1,8 @@
+# rubocop:disable Metrics/ModuleLength
+# rubocop:disable Metrics/PerceivedComplexity
+# rubocop:disable Metrics/CyclomaticComplexity
+# rubocop:disable Metrics/MethodLength
+
 module Enumerable
   def my_each
     return to_enum(:my_each) unless block_given?
@@ -46,11 +51,11 @@ module Enumerable
         return false unless yield element || !element.nil? || element == true
       end
     elsif !block_given? && !parameter.nil?
-      my_each do |element|
+      my_each do |_element|
         if parameter.instance_of?(Regexp)
-          return false unless self.include?(parameter)
+          return false unless include?(parameter)
         else
-          return false unless self.instance_of?(Class) != parameter
+          return false unless instance_of?(Class) != parameter
         end
       end
     elsif !block_given?
@@ -68,19 +73,16 @@ module Enumerable
         return true unless yield element || !element.nil? || element == true
       end
     elsif !block_given? && !parameter.nil?
-      my_each do |element|
+      my_each do |_element|
         if parameter.instance_of?(Regexp)
-          return false unless self.include?(parameter)
+          return false unless include?(parameter)
         else
-          return false unless self.instance_of?(Class) != parameter
+          return false unless instance_of?(Class) != parameter
         end
       end
     elsif !block_given?
-      if self.length > 0
-        return true
-      else
-        return false
-      end
+      return false if empty?
+      return true unless empty?
     end
     true
   end
@@ -91,20 +93,18 @@ module Enumerable
         return false if yield element || !element.nil? || element == true
       end
     elsif !block_given? && !parameter.nil?
-      my_each do |element|
+      my_each do |_element|
         if parameter.instance_of?(Regexp)
-          return true if self.include?(parameter)
-        else
-          return false if self.instance_of?(Class) != parameter
+          return true if include?(parameter)
+        elsif instance_of?(Class) != parameter
+          return false
         end
       end
     elsif !block_given?
-      if self.length > 0
+      unless empty?
         my_each do |element|
           return false if element == true
         end
-      else
-        return true
       end
     end
     true
@@ -118,7 +118,7 @@ module Enumerable
       end
       count
     elsif parameter == 'empty'
-      self.length
+      length
     else
       count = 0
       my_each do |element|
@@ -144,14 +144,12 @@ module Enumerable
     accumulator = 0
 
     my_each do |element|
-      if element.is_a?(String)
-        accumulator = self[0]
-      end
+      accumulator = self[0] if element.is_a?(String)
     end
 
     if !initial_value.nil? && sym.nil? && block_given?
       if initial_value.is_a?(Symbol)
-        my_each do |element|
+        my_each do |_element|
           accumulator = accumulator.method(initial_value).call(obj)
         end
       elsif initial_value.is_a?(Integer)
@@ -176,3 +174,8 @@ module Enumerable
     elements.my_inject { |accumulator, element| accumulator * element }
   end
 end
+
+# rubocop:enable Metrics/ModuleLength
+# rubocop:enable Metrics/PerceivedComplexity
+# rubocop:enable Metrics/CyclomaticComplexity
+# rubocop:enable Metrics/MethodLength
