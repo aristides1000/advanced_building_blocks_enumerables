@@ -2,6 +2,7 @@
 # rubocop:disable Metrics/PerceivedComplexity
 # rubocop:disable Metrics/CyclomaticComplexity
 # rubocop:disable Metrics/MethodLength
+# rubocop:disable Style/EmptyCaseCondition
 
 module Enumerable
   def my_each
@@ -148,11 +149,12 @@ module Enumerable
     end
 
     if !initial_value.nil? && sym.nil? && block_given?
-      if initial_value.is_a?(Symbol)
+      case
+      when initial_value.is_a?(Symbol)
         my_each do |_element|
           accumulator = accumulator.method(initial_value).call(obj)
         end
-      elsif initial_value.is_a?(Integer)
+      when initial_value.is_a?(Integer)
         accumulator += initial_value
         my_each do |element|
           accumulator = yield(accumulator, element)
@@ -179,3 +181,4 @@ end
 # rubocop:enable Metrics/PerceivedComplexity
 # rubocop:enable Metrics/CyclomaticComplexity
 # rubocop:enable Metrics/MethodLength
+# rubocop:enable Style/EmptyCaseCondition
