@@ -1,12 +1,12 @@
 ![](https://img.shields.io/badge/-Ruby-rgb(199%2C%2032%2C%2039)?style=plastic&logo=ruby)
 
-# Advanced Building Blocks - Bubble Sort
+# Advanced Building Blocks - Enumerable Methods
 
-> The purpose of this project is to consolidate the acquired knowledge of the Ruby programming language. For this, I used the Bubble Sort programming technique.
+> The purpose of this project is to consolidate the acquired knowledge of the Ruby programming language. To do this, carried out the own elaboration of own methods associated with enumerable methods.
 ![screenshot](./app_screenshot.png)
 
-This web page was the first Ruby Programming Language Project of the Microverse curriculum.
-In this project, I learned the importance of the ordering of elements in Programming languages and how Ruby can help us to achieve this task.
+This web page was the second Ruby Programming Language Project of the Microverse curriculum.
+In this project, I learned the importance of enumerable methods in programming languages and how Ruby can help us accomplish this task..
 
 ## Built With
 
@@ -14,11 +14,11 @@ In this project, I learned the importance of the ordering of elements in Program
 
 ## Live Demo
 
-[Live Demo Link](https://paiza.io/projects/XbPrzvgKfjw5WpnDVxTJOQ?language=ruby/)
+[Live Demo Link](https://paiza.io/projects/NBCuoG3_jcXlbUbTRuFWwQ/)
 
 ## Getting Started
 
-This project was created with the purpose of studying the importance of variable ordering techniques in Arrays and their application in Ruby.
+This project was created to study the importance of enumerable methods and their application in Ruby.
 
 ### Prerequisites
 
@@ -31,12 +31,12 @@ To get a local copy up and running follow these simple example steps:
 
 - You need to [clone](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository) or [download as zip file](https://www.itprotoday.com/mobile-management-and-security/how-do-i-download-files-github) the repository on your device.
 - [Unzip](http://www.e7z.org/open-zip.htm) the repository or just clone it using git or github.
-- Grab the bubble_sort.rb file and open it on your favorite online code editor, for example [repl.it.](https://replit.com/)
+- Grab the enumerable_methods.rb file and open it on your favorite online code editor, for example [repl.it.](https://replit.com/)
 - If you want to see the source code of the files located in my repository, you can do it through a [code editor of your choice](https://www.elegantthemes.com/blog/resources/best-code-editors), I recommend using [VSCode](https://code.visualstudio.com/), first, you must [install it by following these steps](https://code.visualstudio.com/docs), then you must [open the folder containing my repository in your local repository](https://thisdavej.com/right-click-on-windows-folder-and-open-with-visual-studio-code/#:~:text=You%20can%20now%20navigate%20to,with%20VS%20Code%E2%80%9D%20as%20well.) and [open each of the files](https://code.visualstudio.com/docs/editor/editingevolved) to see their content.
-- If you have any questions or problems about how to run this project, you can leave me a comment in the [issues section](https://github.com/aristides1000/Advanced_Building_Blocks_Bubble_Sort/issues) of this repository, I am more than willing to help you.
+- If you have any questions or problems about how to run this project, you can leave me a comment in the [issues section](https://github.com/aristides1000/advanced_building_blocks_enumerables/issues) of this repository, I am more than willing to help you.
 
 ### Usage
-Run Bubble_sort.rb with [Ruby V.3.0.0](https://www.ruby-lang.org/es/downloads/).
+Run enumerable_methods.rb with [Ruby V.3.0.0](https://www.ruby-lang.org/es/downloads/).
 
 ### Run tests
 Linters errors
@@ -54,7 +54,7 @@ Aristides Jose Molina Pérez
 
 Contributions, issues, and feature requests are welcome!
 
-Feel free to check the [issues page](https://github.com/aristides1000/Advanced_Building_Blocks_Bubble_Sort/issues).
+Feel free to check the [issues page](https://github.com/aristides1000/enumerable_methods/issues).
 
 ## Show your support
 
