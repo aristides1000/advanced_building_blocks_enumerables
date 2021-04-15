@@ -142,15 +142,35 @@ module Enumerable
 
   def my_inject(initial_value = nil, sym = nil)
     accumulator = 0
-    if initial_value.nil? && sym.nil?
-      to_a.my_each do |element|
-        accumulator = yield(accumulator, element)
+
+    my_each do |element|
+      if element.is_a?(String)
+        accumulator = self[0]
+      end
+    end
+
+    if !initial_value.nil? && sym.nil? && block_given?
+      if initial_value.is_a?(Symbol)
+        my_each do |element|
+          accumulator = accumulator.method(initial_value).call(obj)
+        end
+      elsif initial_value.is_a?(Integer)
+        accumulator += initial_value
+        my_each do |element|
+          accumulator = yield(accumulator, element)
+        end
+        accumulator
       end
       accumulator
-    elsif initial_value && sym
-      accumulator += initial_value
-      to_a.my_each do |element|
-        accumulator = accumulator.send(sym, element)
+
+    elsif initial_value.nil? && sym.nil? && block_given?
+
+      my_each do |element|
+        if element.is_a?(String)
+          accumulator = yield(accumulator, element)
+        else
+          accumulator = yield(accumulator, element)
+        end
       end
       accumulator
     end
