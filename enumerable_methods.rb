@@ -1,9 +1,7 @@
 module Enumerable
   def my_each
     return dup unless block_given?
-
     element = self
-
     i = 0
     loop do
       yield(element[i])
@@ -15,9 +13,7 @@ module Enumerable
 
   def my_each_with_index
     return dup unless block_given?
-
     element = self
-
     i = 0
     loop do
       yield(element[i], i)
@@ -29,16 +25,12 @@ module Enumerable
 
   def my_select
     return dup unless block_given?
-
     array = []
-
     my_each do |element|
       array.push(element) if yield element
     end
-
     array
   end
-
   def my_all?
     if block_given?
       my_each do |element|
@@ -99,11 +91,9 @@ module Enumerable
   def my_map
     if block_given?
       array = []
-
       my_each do |element|
         array.push(yield element) if yield element
       end
-
       array
     else
       my_each.to_enum
