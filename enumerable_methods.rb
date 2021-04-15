@@ -54,10 +54,6 @@ module Enumerable
         return true if element.nil?
       end
     end
-=begin
-    if !block_given? && !parameter.nil?
-      
-=end
     true
   end
 
