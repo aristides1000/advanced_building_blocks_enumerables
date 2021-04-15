@@ -57,30 +57,50 @@ module Enumerable
     true
   end
 
-  def my_any?
-    if block_given?
+  def my_any?(parameter = nil)
+    if block_given? && parameter.nil?
       my_each do |element|
-        return true if yield element || !element.nil? || element == true
+        return true unless yield element || !element.nil? || element == true
       end
-    else
+    elsif !block_given? && !parameter.nil?
       my_each do |element|
-        return true unless element.nil? || element == false
+        if parameter.instance_of?(Regexp)
+          return false unless self.include?(parameter)
+        else
+          return false unless self.instance_of?(Class) != parameter
+        end
       end
-    end
-    false
-  end
-
-  def my_none?
-    if block_given?
-      my_each do |element|
-        return false if yield element || !element.nil? || element == true
-      end
-    else
-      my_each do |element|
-        return false unless element.nil? || element == false
+    elsif !block_given?
+      if self.length > 0
+        return true
+      else
+        return false
       end
     end
     true
+  end
+
+  def my_none?(parameter = nil)
+    if block_given? && parameter.nil?
+      my_each do |element|
+        return false unless yield element || !element.nil? || element == true
+      end
+    elsif !block_given? && !parameter.nil?
+      my_each do |element|
+        if parameter.instance_of?(Regexp)
+          return true unless self.include?(parameter)
+        else
+          return true unless self.instance_of?(Class) != parameter
+        end
+      end
+    elsif !block_given?
+      if self.length > 0
+        return false
+      else
+        return true
+      end
+    end
+    false
   end
 
   def my_count(parameter = 'empty')
