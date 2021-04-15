@@ -1,5 +1,5 @@
 require_relative 'enumerable_methods.rb'
-=begin
+
 puts '1.--------my_each--------'
 %w[Sharon Leo Leila Brian Arun].my_each { |friend| puts friend }
 
@@ -57,7 +57,7 @@ longest = %w{ cat sheep bear }.my_inject do |memo, word|
   memo.length > word.length ? memo : word
   end
 puts longest #=> "sheep"
-=end
+
 
 puts 'multiply_els'
-puts multiply_els([2, 4, 5]) #=> 40
+puts [].multiply_els([2, 4, 5]) #=> 40

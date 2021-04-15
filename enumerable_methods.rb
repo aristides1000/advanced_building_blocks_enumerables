@@ -164,15 +164,11 @@ module Enumerable
       accumulator
 
     elsif initial_value.nil? && sym.nil? && block_given?
-
-      my_each do |element|
-        if element.is_a?(String)
-          accumulator = yield(accumulator, element)
-        else
-          accumulator = yield(accumulator, element)
-        end
+      result = to_a[0]
+      to_a[1..-1].my_each do |element|
+        result = yield(result, element)
       end
-      accumulator
+      result
     end
   end
 
