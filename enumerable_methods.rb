@@ -151,23 +151,7 @@ module Enumerable
   end
 
   def multiply_els(elements)
-    elements.my_inject { |accumulator, element| accumulator * element }
+    p elements.my_inject() { |accumulator, element| accumulator * element }
   end
 
 end
-
-
-
-# arr = [5, 6, 7, 8]
-
-# p arr.inject { |accumulator, number| accumulator + number }
-# p arr.my_inject { |accumulator, number| accumulator + number }
-
-# p arr.inject(1000) { |accumulator, number| accumulator * number }
-# p arr.my_inject(1000, :*) { |accumulator, number| accumulator * number }
-
-# Para ejecutar este archivo en irb, debo hacer lo siguiente
-=begin
-$ irb
->> load './enumerable_methods.rb'
-=end
