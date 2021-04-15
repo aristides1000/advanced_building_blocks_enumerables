@@ -1,3 +1,5 @@
+# rubocop:disable Metrics/ModuleLength
+
 module Enumerable
   def my_each
     return dup unless block_given?
@@ -124,3 +126,5 @@ module Enumerable
     elements.my_inject { |accumulator, element| accumulator * element }
   end
 end
+
+# rubocop:enable Metrics/ModuleLength
