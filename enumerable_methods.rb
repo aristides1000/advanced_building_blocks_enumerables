@@ -57,7 +57,6 @@ module Enumerable
 =begin
     if !block_given? && !parameter.nil?
       
-
 =end
     true
   end
