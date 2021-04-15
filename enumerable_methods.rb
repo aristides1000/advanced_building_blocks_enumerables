@@ -163,7 +163,7 @@ module Enumerable
 
     elsif initial_value.nil? && sym.nil? && block_given?
       result = to_a[0]
-      to_a[1..-1].my_each do |element|
+      to_a[1..].my_each do |element|
         result = yield(result, element)
       end
       result
