@@ -1,6 +1,6 @@
 module Enumerable
   def my_each
-    return self.dup unless block_given?
+    return dup unless block_given?
 
     element = self
 
@@ -11,11 +11,10 @@ module Enumerable
       break if i == element.length
     end
     self
-
   end
 
   def my_each_with_index
-    return self.dup unless block_given?
+    return dup unless block_given?
 
     element = self
 
@@ -29,120 +28,97 @@ module Enumerable
   end
 
   def my_select
-    return self.dup unless block_given?
+    return dup unless block_given?
 
     array = []
 
     my_each do |element|
-      if yield element
-        array.push(element)
-      end
+      array.push(element) if yield element
     end
 
     array
   end
 
   def my_all?
-    unless block_given?
+    if block_given?
       my_each do |element|
-        if element.nil? || element == false
-          return false
-        end
+        return false unless yield element || !element.nil? || element == true
       end
     else
       my_each do |element|
-        unless yield element || !element.nil? || element == true
-          return false
-        end
+        return false if element.nil? || element == false
       end
     end
     true
-
   end
 
   def my_any?
-    unless block_given?
+    if block_given?
       my_each do |element|
-        unless element.nil? || element == false
-          return true
-        end
+        return true if yield element || !element.nil? || element == true
       end
     else
       my_each do |element|
-        if yield element || !element.nil? || element == true
-          return true
-        end
+        return true unless element.nil? || element == false
       end
     end
     false
   end
 
   def my_none?
-    unless block_given?
+    if block_given?
       my_each do |element|
-        unless element.nil? || element == false
-          return false
-        end
+        return false if yield element || !element.nil? || element == true
       end
     else
       my_each do |element|
-        if yield element || !element.nil? || element == true
-          return false
-        end
+        return false unless element.nil? || element == false
       end
     end
     true
   end
 
-  def my_count(parameter = "empty")
-    unless block_given?
-      unless parameter == "empty"
-        count = 0
-        my_each do |element|
-          if element == parameter
-            count += 1
-          end
-        end
-        return count
-      else
-        return my_each.length
+  def my_count(parameter = 'empty')
+    if block_given?
+      count = 0
+      my_each do |element|
+        count += 1 if yield element
       end
+      count
+    elsif parameter == 'empty'
+      my_each.length
     else
       count = 0
       my_each do |element|
-        if yield element
-          count += 1
-        end
+        count += 1 if element == parameter
       end
-      return count
+      count
     end
   end
 
   def my_map
-    unless block_given?
-      my_each.to_enum
-    else
-    array = []
+    if block_given?
+      array = []
 
       my_each do |element|
-        if yield element
-          array.push(yield element)
-        end
+        array.push(yield element) if yield element
       end
 
-    array
+      array
+    else
+      my_each.to_enum
     end
   end
 
   def my_inject(initial_value = nil, sym = nil)
     accumulator = 0
-    if initial_value == nil && sym == nil
+    if initial_value.nil? && sym.nil?
       to_a.my_each do |element|
         accumulator = yield(accumulator, element)
       end
       accumulator
     elsif initial_value && sym
-      accumulator = accumulator + initial_value
+      accumulator += initial_value
       to_a.my_each do |element|
         accumulator = accumulator.send(sym, element)
       end
@@ -151,7 +127,6 @@ module Enumerable
   end
 
   def multiply_els(elements)
-    p elements.my_inject() { |accumulator, element| accumulator * element }
+    elements.my_inject { |accumulator, element| accumulator * element }
   end
-
 end
