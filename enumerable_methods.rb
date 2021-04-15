@@ -119,25 +119,52 @@ module Enumerable
   end
 
   def my_map
-    # your code here
+    unless block_given?
+      my_each.to_enum
+    else
+    array = []
+
+      my_each do |element|
+        if yield element
+          array.push(yield element)
+        end
+      end
+
+    array
+    end
   end
 
-  def my_inject
-    # your code here
+  def my_inject(initial_value = nil, sym = nil)
+    accumulator = 0
+    if initial_value == nil && sym == nil
+      to_a.my_each do |element|
+        accumulator = yield(accumulator, element)
+      end
+      accumulator
+    elsif initial_value && sym
+      accumulator = accumulator + initial_value
+      to_a.my_each do |element|
+        accumulator = accumulator.send(sym, element)
+      end
+      accumulator
+    end
+  end
+
+  def multiply_els(elements)
+    elements.my_inject { |accumulator, element| accumulator * element }
   end
 
 end
 
-arr = [1, 2, 2, 5, 2, 2, 4]
 
-# p arr.count
-# p arr.my_count
 
-# p arr.count(2)
-# p arr.my_count(2)
+# arr = [5, 6, 7, 8]
 
-# p arr.count { |x| x % 2 == 0 }
-# p arr.my_count { |x| x % 2 == 0 }
+# p arr.inject { |accumulator, number| accumulator + number }
+# p arr.my_inject { |accumulator, number| accumulator + number }
+
+# p arr.inject(1000) { |accumulator, number| accumulator * number }
+# p arr.my_inject(1000, :*) { |accumulator, number| accumulator * number }
 
 # Para ejecutar este archivo en irb, debo hacer lo siguiente
 =begin
