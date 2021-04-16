@@ -3,6 +3,10 @@
 # rubocop:disable Metrics/CyclomaticComplexity
 # rubocop:disable Metrics/MethodLength
 # rubocop:disable Style/EmptyCaseCondition
+# rubocop:disable Style/GuardClause
+# rubocop:disable Lint/ShadowingOuterLocalVariable
+# rubocop:disable Metrics/BlockNesting
+# rubocop:disable Lint/ToEnumArguments
 
 module Enumerable
   def my_each
@@ -11,7 +15,7 @@ module Enumerable
     if instance_of?(Array)
       element = self
     elsif instance_of?(Range) || Hash
-      element = self.to_a
+      element = to_a
     end
 
     i = 0
@@ -62,8 +66,8 @@ module Enumerable
           return false unless parameter.match(element)
         elsif parameter.is_a?(Class)
           return false unless [element.class, element.class.superclass].include?(parameter)
-        else
-          return false if element != parameter
+        elsif element != parameter
+          return false
         end
       end
     elsif !block_given?
@@ -88,17 +92,15 @@ module Enumerable
           else
             i = 0
             my_each do |element|
-              if parameter.match(element)
-                i += 1
-              end
+              i += 1 if parameter.match(element)
             end
-            return false if i == 0
+            return false if i.zero?
           end
         elsif parameter.is_a?(Class)
           return false unless [element.class, element.class.superclass].include?(parameter)
         else
           my_each do |element|
-            return true if  element == parameter
+            return true if element == parameter
           end
           return false
         end
@@ -157,7 +159,7 @@ module Enumerable
 
   def my_map(parameter = nil)
     return to_enum(:my_map) unless block_given? || parameter
-    
+
     array = []
     if parameter.nil?
       my_each do |element|
@@ -174,7 +176,7 @@ module Enumerable
   def my_inject(initial_value = nil, sym = nil)
     accumulator = 0
 
-    return "no block given (LocalJumpError)" if initial_value.nil? && sym.nil? && !block_given?
+    return 'no block given (LocalJumpError)' if initial_value.nil? && sym.nil? && !block_given?
 
     my_each do |element|
       accumulator = self[0] if element.is_a?(String)
@@ -183,7 +185,7 @@ module Enumerable
     if !initial_value.nil? && sym.nil? && block_given?
       case
       when initial_value.is_a?(Symbol)
-        my_each do |element|
+        my_each do |_element|
           accumulator = accumulator.method(initial_value).call(obj)
         end
       when initial_value.is_a?(Integer)
@@ -210,7 +212,6 @@ module Enumerable
       result
     end
   end
-
 end
 
 def multiply_els(elements)
@@ -222,3 +223,7 @@ end
 # rubocop:enable Metrics/CyclomaticComplexity
 # rubocop:enable Metrics/MethodLength
 # rubocop:enable Style/EmptyCaseCondition
+# rubocop:enable Style/GuardClause
+# rubocop:enable Lint/ShadowingOuterLocalVariable
+# rubocop:enable Metrics/BlockNesting
+# rubocop:enable Lint/ToEnumArguments
