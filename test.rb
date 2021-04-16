@@ -48,11 +48,11 @@ puts [nil, false, true].my_none? #=> false
 
 puts '7.--------my_count--------'
 arr = [1, 2, 4, 2]
-#puts arr.my_count #=> 4
+puts arr.my_count #=> 4
 puts (1..5).my_count #=> 5
-#puts arr.my_count(2) #=> 2
+puts arr.my_count(2) #=> 2
 puts (1..5).my_count(2) #=> 1
-#puts (arr.my_count { |x| (x % 2).zero? }) #=> 3
+puts (arr.my_count { |x| (x % 2).zero? }) #=> 3
 
 =begin
 puts '8.--------my_maps--------'
