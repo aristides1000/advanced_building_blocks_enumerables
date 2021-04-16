@@ -32,25 +32,29 @@ puts [nil, true, 99].my_any?("Hola") #=> false
 puts [nil, true, 99].my_any? #=> true
 puts [nil, true, 99].any? #=> true
 puts [].my_any? #=> false
-=end
 
-=begin
 puts '6.--------my_none--------'
 puts (%w[ant bear cat].my_none? { |word| word.length == 5 }) #=> true
 puts (%w[ant bear cat].my_none? { |word| word.length >= 4 }) #=> false
 puts %w[ant bear cat].my_none?(/d/) #=> true
 puts [1, 3.14, 42].my_none?(Float) #=> false
+puts [1, 3.14, 42].my_none?(3.14) #=> false
+puts [1, 3.14, 42].my_none?("Hola") #=> true
 puts [].my_none? #=> true
 puts [nil].my_none? #=> true
 puts [nil, false].my_none? #=> true
 puts [nil, false, true].my_none? #=> false
+=end
 
 puts '7.--------my_count--------'
 arr = [1, 2, 4, 2]
-puts arr.my_count #=> 4
-puts arr.my_count(2) #=> 2
-puts (arr.my_count { |x| (x % 2).zero? }) #=> 3
+#puts arr.my_count #=> 4
+puts (1..5).my_count #=> 5
+#puts arr.my_count(2) #=> 2
+puts (1..5).my_count(2) #=> 1
+#puts (arr.my_count { |x| (x % 2).zero? }) #=> 3
 
+=begin
 puts '8.--------my_maps--------'
 my_order = ['medium Big Mac', 'medium fries', 'medium milkshake']
 puts (my_order.my_map { |item| item.gsub('medium', 'extra large') })

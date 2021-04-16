@@ -11,7 +11,7 @@ module Enumerable
     if instance_of?(Array)
       element = self
     elsif instance_of?(Range) || Hash
-      element = to_a
+      element = self.to_a
     end
 
     i = 0
@@ -97,7 +97,6 @@ module Enumerable
         elsif parameter.is_a?(Class)
           return false unless [element.class, element.class.superclass].include?(parameter)
         else
-          # return false if element != parameter
           my_each do |element|
             return true if  element == parameter
           end
@@ -123,7 +122,9 @@ module Enumerable
         elsif parameter.is_a?(Class)
           return false unless [element.class, element.class.superclass].include?(parameter)
         else
-          return false if element != parameter
+          my_each do |element|
+            return false if element == parameter
+          end
         end
       end
     elsif !block_given?
@@ -144,7 +145,7 @@ module Enumerable
       end
       count
     elsif parameter == 'empty'
-      length
+      to_a.length
     else
       count = 0
       my_each do |element|
