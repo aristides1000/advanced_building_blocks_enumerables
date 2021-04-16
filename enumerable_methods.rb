@@ -81,11 +81,27 @@ module Enumerable
         return true unless yield element || !element.nil? || element == true
       end
     elsif !block_given? && !parameter.nil?
-      my_each do |_element|
+      my_each do |element|
         if parameter.instance_of?(Regexp)
-          return false unless include?(parameter)
+          if parameter.match(element)
+            return true
+          else
+            i = 0
+            my_each do |element|
+              if parameter.match(element)
+                i += 1
+              end
+            end
+            return false if i == 0
+          end
+        elsif parameter.is_a?(Class)
+          return false unless [element.class, element.class.superclass].include?(parameter)
         else
-          return false unless instance_of?(Class) != parameter
+          # return false if element != parameter
+          my_each do |element|
+            return true if  element == parameter
+          end
+          return false
         end
       end
     elsif !block_given?
@@ -101,11 +117,13 @@ module Enumerable
         return false if yield element || !element.nil? || element == true
       end
     elsif !block_given? && !parameter.nil?
-      my_each do |_element|
+      my_each do |element|
         if parameter.instance_of?(Regexp)
-          return true if include?(parameter)
-        elsif instance_of?(Class) != parameter
-          return false
+          return false unless parameter.match(element)
+        elsif parameter.is_a?(Class)
+          return false unless [element.class, element.class.superclass].include?(parameter)
+        else
+          return false if element != parameter
         end
       end
     elsif !block_given?
@@ -179,9 +197,10 @@ module Enumerable
     end
   end
 
-  def multiply_els(elements)
-    elements.my_inject { |accumulator, element| accumulator * element }
-  end
+end
+
+def multiply_els(elements)
+  elements.my_inject { |accumulator, element| accumulator * element }
 end
 
 # rubocop:enable Metrics/ModuleLength
