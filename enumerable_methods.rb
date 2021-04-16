@@ -226,4 +226,4 @@ end
 # rubocop:enable Style/GuardClause
 # rubocop:enable Lint/ShadowingOuterLocalVariable
 # rubocop:enable Metrics/BlockNesting
-
+# rubocop:enable Lint/ToEnumArguments
