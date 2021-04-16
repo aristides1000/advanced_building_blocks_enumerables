@@ -31,7 +31,7 @@ module Enumerable
     elsif instance_of?(Range) || Hash
       element = to_a
     end
-    
+
     i = 0
     loop do
       yield(element[i], i)
@@ -57,11 +57,13 @@ module Enumerable
         return false unless yield element || !element.nil? || element == true
       end
     elsif !block_given? && !parameter.nil?
-      my_each do |_element|
+      my_each do |element|
         if parameter.instance_of?(Regexp)
-          return false unless include?(parameter)
+          return false unless parameter.match(element)
+        elsif parameter.is_a?(Class)
+          return false unless [element.class, element.class.superclass].include?(parameter)
         else
-          return false unless instance_of?(Class) != parameter
+          return false if element != parameter
         end
       end
     elsif !block_given?

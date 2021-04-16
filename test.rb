@@ -1,7 +1,7 @@
 # rubocop:disable Lint/ParenthesesAsGroupedExpression
 
 require_relative 'enumerable_methods.rb'
-
+=begin
 puts '1.--------my_each--------'
 %w[Sharon Leo Leila Brian Arun].my_each { |friend| puts friend }
 
@@ -10,15 +10,18 @@ puts '2.--------my_each_with_index--------'
 
 puts '3.--------my_select--------'
 puts (%w[Sharon Leo Leila Brian Arun].my_select { |friend| friend != 'Brian' })
-
+=end
 puts '4.--------my_all--------'
-puts (%w[ant bear cat].my_all? { |word| word.length >= 3 }) #=> true
-puts (%w[ant bear cat].my_all? { |word| word.length >= 4 }) #=> false
-puts %w[ant bear cat].my_all?(/t/) #=> false
-puts [1, 2i, 3.14].my_all?(Numeric) #=> true
-puts [nil, true, 99].all? #=> false
-puts [].my_all? #=> true
+#puts (%w[ant bear cat].my_all? { |word| word.length >= 3 }) #=> true
+#puts (%w[ant bear cat].my_all? { |word| word.length >= 4 }) #=> false
+#puts %w[ant bear cat].my_all?(/t/) #=> false
+#puts %w[ant bat cat].my_all?(/t/) #=> true
+#puts [1, 2i, 3.14].my_all?(Numeric) #=> true
+#puts ["Hi", 2i, 3.14].my_all?(Numeric) #=> false
+#puts [nil, true, 99].all? #=> false
+#puts [].my_all? #=> true
 
+=begin
 puts '5.--------my_any--------'
 puts (%w[ant bear cat].my_any? { |word| word.length >= 3 }) #=> true
 puts (%w[ant bear cat].my_any? { |word| word.length >= 4 }) #=> true
@@ -60,6 +63,7 @@ end
 puts longest #=> "sheep"
 
 puts 'multiply_els'
-puts [].multiply_els([2, 4, 5]) #=> 40
+puts multiply_els([2, 4, 5]) #=> 40
+=end
 
 # rubocop:enable Lint/ParenthesesAsGroupedExpression
