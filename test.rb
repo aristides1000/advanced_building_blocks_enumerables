@@ -44,7 +44,6 @@ puts [].my_none? #=> true
 puts [nil].my_none? #=> true
 puts [nil, false].my_none? #=> true
 puts [nil, false, true].my_none? #=> false
-=end
 
 puts '7.--------my_count--------'
 arr = [1, 2, 4, 2]
@@ -53,8 +52,8 @@ puts (1..5).my_count #=> 5
 puts arr.my_count(2) #=> 2
 puts (1..5).my_count(2) #=> 1
 puts (arr.my_count { |x| (x % 2).zero? }) #=> 3
+=end
 
-=begin
 puts '8.--------my_maps--------'
 my_order = ['medium Big Mac', 'medium fries', 'medium milkshake']
 puts (my_order.my_map { |item| item.gsub('medium', 'extra large') })
@@ -63,6 +62,7 @@ puts 'my_map_proc'
 my_proc = proc { |i| i * i }
 puts (1..5).my_map(&my_proc)
 
+=begin
 puts '9.--------my_inject--------'
 puts ((1..5).my_inject { |sum, n| sum + n }) #=> 15
 puts (1..5).my_inject(1) { |product, n| product * n } #=> 120

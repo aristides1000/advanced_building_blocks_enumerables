@@ -155,16 +155,20 @@ module Enumerable
     end
   end
 
-  def my_map
-    if block_given?
-      array = []
+  def my_map(parameter = nil)
+    return to_enum(:my_map) unless block_given? || parameter
+    
+    array = []
+    if parameter.nil?
       my_each do |element|
         array.push(yield element) if yield element
       end
-      array
     else
-      my_each.to_enum
+      my_each do |element|
+        array.push(parameter.call(element))
+      end
     end
+    array
   end
 
   def my_inject(initial_value = nil, sym = nil)
