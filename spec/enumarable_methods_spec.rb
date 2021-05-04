@@ -1,7 +1,7 @@
 # rubocop:disable Metrics/BlockLength
 
 require 'spec_helper'
-require_relative '../enumerable_methods.rb'
+require_relative '../enumerable_methods'
 
 my_numbers_array = (1..10).to_a
 my_chars_array = ('aa'..'bb').to_a
@@ -19,37 +19,37 @@ RSpec.describe Enumerable do
     describe 'for arrays' do
       it 'when the elements are Numbers' do
         standard_result = []
-        my_numbers_array.each { |v|
+        my_numbers_array.each do |v|
           standard_result << v * v
-        }
+        end
         my_result = []
-        my_numbers_array.my_each { |v|
+        my_numbers_array.my_each do |v|
           my_result << v * v
-        }
+        end
         expect(my_result).to eql(standard_result)
       end
 
       it 'when the elements are Strings' do
         standard_result = []
-        my_chars_array.each { |v|
+        my_chars_array.each do |v|
           standard_result << v.upcase
-        }
+        end
         my_result = []
-        my_chars_array.my_each { |v|
+        my_chars_array.my_each do |v|
           my_result << v.upcase
-        }
+        end
         expect(my_result).to eql(standard_result)
       end
 
       it 'when the array is empty' do
         standard_result = []
-        [].each { |v|
+        [].each do |v|
           standard_result << v
-        }
+        end
         my_result = []
-        [].my_each { |v|
+        [].my_each do |v|
           my_result << v
-        }
+        end
         expect(my_result).to eql(standard_result)
       end
 
@@ -63,31 +63,31 @@ RSpec.describe Enumerable do
     describe 'for hashes' do
       it 'when the hash has numbers and strings as values' do
         standard_result = []
-        my_numbers_array.each { |v|
+        my_hash.each do |v|
           standard_result << v + v
-        }
+        end
         my_result = []
-        my_numbers_array.my_each { |v|
+        my_hash.my_each do |v|
           my_result << v + v
-        }
+        end
         expect(my_result).to eql(standard_result)
       end
 
       it 'when the hash is empty' do
         standard_result = []
-        {}.each { |v|
+        {}.each do |v|
           standard_result << v
-        }
+        end
         my_result = []
-        {}.my_each { |v|
+        {}.my_each do |v|
           my_result << v
-        }
+        end
         expect(my_result).to eql(standard_result)
       end
 
       it 'without a block' do
-        standard_result = my_numbers_array.each.class
-        my_result = my_numbers_array.my_each.class
+        standard_result = my_hash.each.class
+        my_result = my_hash.my_each.class
         expect(my_result).to eql(standard_result)
       end
     end
@@ -95,13 +95,13 @@ RSpec.describe Enumerable do
     describe 'for ranges' do
       it 'with numbers' do
         standard_result = []
-        my_range.each { |v|
+        my_range.each do |v|
           standard_result << v * v
-        }
+        end
         my_result = []
-        my_range.my_each { |v|
+        my_range.my_each do |v|
           my_result << v * v
-        }
+        end
         expect(my_result).to eql(standard_result)
       end
 
