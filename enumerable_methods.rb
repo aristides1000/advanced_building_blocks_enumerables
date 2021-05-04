@@ -20,9 +20,10 @@ module Enumerable
 
     i = 0
     loop do
+      break if i == element.length
+
       yield(element[i])
       i += 1
-      break if i == element.length
     end
     self
   end
