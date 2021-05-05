@@ -10,21 +10,23 @@
 
 module Enumerable
   def my_each
-    return to_enum(:my_each) unless block_given?
+    return to_enum unless block_given?
 
-    if instance_of?(Array)
-      element = self
-    elsif instance_of?(Range) || Hash
-      element = to_a
-    end
+    array = to_a
 
     i = 0
-    loop do
-      break if i == element.length
-
-      yield(element[i])
-      i += 1
+    if is_a?(Array) || is_a?(Range)
+      while i < array.length
+        yield(array[i])
+        i += 1
+      end
+    else
+      while i < array.length
+        yield(array[i][0], array[i][1])
+        i += 1
+      end
     end
+
     self
   end
 
@@ -50,11 +52,19 @@ module Enumerable
   def my_select
     return to_enum(:my_select) unless block_given?
 
-    array = []
-    my_each do |element|
-      array.push(element) if yield element
+    if is_a?(Array) || is_a?(Range)
+      array = []
+      my_each do |element|
+        array.push(element) if yield element
+      end
+      array
+    else
+      hash = {}
+      my_each do |i, v|
+        hash[i] = v if yield(i, v)
+      end
+      hash
     end
-    array
   end
 
   def my_all?(parameter = nil)
