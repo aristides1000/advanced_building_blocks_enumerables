@@ -130,11 +130,11 @@ RSpec.describe Enumerable do
       it 'when the elements are Strings' do
         standard_result = []
         my_chars_array.each_with_index do |v, i|
-          standard_result << i.to_s + " " + (v.upcase)
+          standard_result << "#{i} -> #{v.upcase}"
         end
         my_result = []
         my_chars_array.my_each_with_index do |v, i|
-          my_result << i.to_s + " " + (v.upcase)
+          my_result << "#{i} -> #{v.upcase}"
         end
         expect(my_result).to eql(standard_result)
       end
@@ -142,11 +142,11 @@ RSpec.describe Enumerable do
       it 'when the array is empty' do
         standard_result = []
         [].each_with_index do |v, i|
-          standard_result << i.to_s + " " + v
+          standard_result << "#{i} -> #{v.upcase}"
         end
         my_result = []
         [].my_each_with_index do |v, i|
-          my_result << i.to_s + " " + v
+          my_result << "#{i} -> #{v.upcase}"
         end
         expect(my_result).to eql(standard_result)
       end
@@ -162,11 +162,11 @@ RSpec.describe Enumerable do
       it 'when the hash has numbers and strings as values' do
         standard_result = []
         my_hash.each_with_index do |v, i|
-          standard_result << i.to_s + ": " + v.to_s
+          standard_result << "#{i} -> #{v}"
         end
         my_result = []
         my_hash.my_each_with_index do |v, i|
-          my_result << i.to_s + ": " + v.to_s
+          my_result << "#{i} -> #{v}"
         end
         expect(my_result).to eql(standard_result)
       end
@@ -174,11 +174,11 @@ RSpec.describe Enumerable do
       it 'when the hash is empty' do
         standard_result = []
         {}.each_with_index do |v, i|
-          standard_result << i.to_s + ": " + v.to_s
+          standard_result << "#{i} -> #{v}"
         end
         my_result = []
         {}.my_each_with_index do |v, i|
-          my_result << i.to_s + ": " + v.to_s
+          my_result << "#{i} -> #{v}"
         end
         expect(my_result).to eql(standard_result)
       end
@@ -214,12 +214,8 @@ RSpec.describe Enumerable do
   context 'Testing #my_select' do
     describe 'for arrays' do
       it 'when the elements are Numbers' do
-        standard_result = my_numbers_array.select do |v|
-          v.even?
-        end
-        my_result = my_numbers_array.my_select do |v|
-          v.even?
-        end
+        standard_result = my_numbers_array.select(&:even?)
+        my_result = my_numbers_array.my_select(&:even?)
         expect(my_result).to eql(standard_result)
       end
 
@@ -234,12 +230,8 @@ RSpec.describe Enumerable do
       end
 
       it 'when the array is empty' do
-        standard_result = [].select do |v|
-          v.positive?
-        end
-        my_result = [].my_select do |v|
-          v.positive?
-        end
+        standard_result = [].select(&:positive?)
+        my_result = [].my_select(&:positive?)
         expect(my_result).to eql(standard_result)
       end
 
@@ -317,13 +309,13 @@ RSpec.describe Enumerable do
 
       it 'when the elements are Strings (positive result)' do
         standard_result = my_chars_array.all? { |word| word.length >= 2 }
-        my_result = my_chars_array.my_all?{ |word| word.length >= 2 }
+        my_result = my_chars_array.my_all? { |word| word.length >= 2 }
         expect(my_result).to eql(standard_result)
       end
 
       it 'when the elements are Strings (negative result)' do
         standard_result = my_chars_array.all? { |word| word.include?('a') }
-        my_result = my_chars_array.my_all?{ |word| word.include?('a') }
+        my_result = my_chars_array.my_all? { |word| word.include?('a') }
         expect(my_result).to eql(standard_result)
       end
 
@@ -403,13 +395,13 @@ RSpec.describe Enumerable do
 
       it 'when the elements are Strings (positive result)' do
         standard_result = my_chars_array.any? { |word| word.include?('b') }
-        my_result = my_chars_array.my_any?{ |word| word.include?('b') }
+        my_result = my_chars_array.my_any? { |word| word.include?('b') }
         expect(my_result).to eql(standard_result)
       end
 
       it 'when the elements are Strings (negative result)' do
         standard_result = my_chars_array.any? { |word| word.include?('z') }
-        my_result = my_chars_array.my_any?{ |word| word.include?('z') }
+        my_result = my_chars_array.my_any? { |word| word.include?('z') }
         expect(my_result).to eql(standard_result)
       end
 
@@ -489,13 +481,13 @@ RSpec.describe Enumerable do
 
       it 'when the elements are Strings (positive result)' do
         standard_result = my_chars_array.any? { |word| word.include?('b') }
-        my_result = my_chars_array.my_any?{ |word| word.include?('b') }
+        my_result = my_chars_array.my_any? { |word| word.include?('b') }
         expect(my_result).to eql(standard_result)
       end
 
       it 'when the elements are Strings (negative result)' do
         standard_result = my_chars_array.any? { |word| word.include?('z') }
-        my_result = my_chars_array.my_any?{ |word| word.include?('z') }
+        my_result = my_chars_array.my_any? { |word| word.include?('z') }
         expect(my_result).to eql(standard_result)
       end
 
@@ -544,12 +536,8 @@ RSpec.describe Enumerable do
   context 'Testing #my_count' do
     describe 'for arrays' do
       it 'when the elements are Numbers' do
-        standard_result = my_numbers_array.count do |v|
-          v.even?
-        end
-        my_result = my_numbers_array.my_count do |v|
-          v.even?
-        end
+        standard_result = my_numbers_array.count(&:even?)
+        my_result = my_numbers_array.my_count(&:even?)
         expect(my_result).to eql(standard_result)
       end
 
@@ -564,12 +552,8 @@ RSpec.describe Enumerable do
       end
 
       it 'when the array is empty' do
-        standard_result = [].count do |v|
-          v.positive?
-        end
-        my_result = [].my_count do |v|
-          v.positive?
-        end
+        standard_result = [].count(&:positive?)
+        my_result = [].my_count(&:positive?)
         expect(my_result).to eql(standard_result)
       end
 

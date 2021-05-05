@@ -2,7 +2,6 @@
 # rubocop:disable Metrics/PerceivedComplexity
 # rubocop:disable Metrics/CyclomaticComplexity
 # rubocop:disable Metrics/MethodLength
-# rubocop:disable Style/EmptyCaseCondition
 # rubocop:disable Style/GuardClause
 # rubocop:disable Lint/ShadowingOuterLocalVariable
 # rubocop:disable Metrics/BlockNesting
@@ -128,7 +127,7 @@ module Enumerable
   end
 
   def my_none?(parameter = nil, &block)
-    return !my_any?(parameter, &block)
+    !my_any?(parameter, &block)
   end
 
   def my_count(parameter = 'empty')
@@ -233,7 +232,6 @@ end
 # rubocop:enable Metrics/PerceivedComplexity
 # rubocop:enable Metrics/CyclomaticComplexity
 # rubocop:enable Metrics/MethodLength
-# rubocop:enable Style/EmptyCaseCondition
 # rubocop:enable Style/GuardClause
 # rubocop:enable Lint/ShadowingOuterLocalVariable
 # rubocop:enable Metrics/BlockNesting
