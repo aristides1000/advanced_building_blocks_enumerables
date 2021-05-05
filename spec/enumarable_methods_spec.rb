@@ -112,6 +112,104 @@ RSpec.describe Enumerable do
       end
     end
   end
+
+  context 'Testing #my_each_with_index' do
+    describe 'for arrays' do
+      it 'when the elements are Numbers' do
+        standard_result = []
+        my_numbers_array.each_with_index do |v, i|
+          standard_result << v * i
+        end
+        my_result = []
+        my_numbers_array.my_each_with_index do |v, i|
+          my_result << v * i
+        end
+        expect(my_result).to eql(standard_result)
+      end
+
+      it 'when the elements are Strings' do
+        standard_result = []
+        my_chars_array.each_with_index do |v, i|
+          standard_result << i.to_s + " " + (v.upcase)
+        end
+        my_result = []
+        my_chars_array.my_each_with_index do |v, i|
+          my_result << i.to_s + " " + (v.upcase)
+        end
+        expect(my_result).to eql(standard_result)
+      end
+
+      it 'when the array is empty' do
+        standard_result = []
+        [].each_with_index do |v, i|
+          standard_result << i.to_s + " " + v
+        end
+        my_result = []
+        [].my_each_with_index do |v, i|
+          my_result << i.to_s + " " + v
+        end
+        expect(my_result).to eql(standard_result)
+      end
+
+      it 'without a block' do
+        standard_result = my_numbers_array.each_with_index.class
+        my_result = my_numbers_array.my_each_with_index.class
+        expect(my_result).to eql(standard_result)
+      end
+    end
+
+    describe 'for hashes' do
+      it 'when the hash has numbers and strings as values' do
+        standard_result = []
+        my_hash.each_with_index do |v, i|
+          standard_result << i.to_s + ": " + v.to_s
+        end
+        my_result = []
+        my_hash.my_each_with_index do |v, i|
+          my_result << i.to_s + ": " + v.to_s
+        end
+        expect(my_result).to eql(standard_result)
+      end
+
+      it 'when the hash is empty' do
+        standard_result = []
+        {}.each_with_index do |v, i|
+          standard_result << i.to_s + ": " + v.to_s
+        end
+        my_result = []
+        {}.my_each_with_index do |v, i|
+          my_result << i.to_s + ": " + v.to_s
+        end
+        expect(my_result).to eql(standard_result)
+      end
+
+      it 'without a block' do
+        standard_result = my_hash.each_with_index.class
+        my_result = my_hash.my_each_with_index.class
+        expect(my_result).to eql(standard_result)
+      end
+    end
+
+    describe 'for ranges' do
+      it 'with numbers' do
+        standard_result = []
+        my_range.each_with_index do |v, i|
+          standard_result << v * i
+        end
+        my_result = []
+        my_range.my_each_with_index do |v, i|
+          my_result << v * i
+        end
+        expect(my_result).to eql(standard_result)
+      end
+
+      it 'without a block' do
+        standard_result = my_range.each_with_index.class
+        my_result = my_range.my_each_with_index.class
+        expect(my_result).to eql(standard_result)
+      end
+    end
+  end
 end
 
 # rubocop:enable Metrics/BlockLength
