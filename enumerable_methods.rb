@@ -165,44 +165,63 @@ module Enumerable
     array
   end
 
-  def my_inject(initial_value = nil, sym = nil)
-    accumulator = 0
+  # def my_inject(initial_value = nil, sym = nil)
+  #   accumulator = 0
 
-    return 'no block given (LocalJumpError)' if initial_value.nil? && sym.nil? && !block_given?
+  #   raise LocalJumpError.new 'no block given' if initial_value.nil? && sym.nil? && !block_given?
 
-    my_each do |element|
-      accumulator = self[0] if element.is_a?(String)
+  #   my_each do |element|
+  #     accumulator = self[0] if element.is_a?(String)
+  #   end
+
+  #   if !initial_value.nil? && sym.nil? && block_given?
+  #     case
+  #     when initial_value.is_a?(Symbol)
+  #       my_each do |_element|
+  #         accumulator = accumulator.method(initial_value).call(obj)
+  #       end
+  #     when initial_value.is_a?(Integer)
+  #       accumulator += initial_value
+  #       my_each do |element|
+  #         accumulator = yield(accumulator, element)
+  #       end
+  #       accumulator
+  #     end
+  #     accumulator
+
+  #   elsif initial_value.nil? && sym.nil? && block_given?
+  #     result = to_a[0]
+  #     to_a[1..].my_each do |element|
+  #       result = yield(result, element)
+  #     end
+  #     result
+
+  #   elsif !initial_value.nil? && sym.nil? && !block_given?
+  #     result = to_a[0]
+  #     my_each do |element|
+  #       result = result.send(initial_value, element)
+  #     end
+  #     result
+  #   end
+  # end
+
+  def my_inject(init = nil, sym = nil, &block)
+    enum = to_a
+    raise(LocalJumpError, 'no block given') if init.nil? && sym.nil? && !block_given?
+    return init if enum.empty? && block_given?
+
+    if block_given?
+      if init.nil?
+        init = enum.drop(1).my_inject(enum[0], &block)
+      else
+        enum.my_each { |v| init = block.call(init, v) }
+      end
+    else
+      sym, init = init, sym if sym.nil?
+      return enum.my_inject(init) { |a, b| a.send(sym, b) }
     end
 
-    if !initial_value.nil? && sym.nil? && block_given?
-      case
-      when initial_value.is_a?(Symbol)
-        my_each do |_element|
-          accumulator = accumulator.method(initial_value).call(obj)
-        end
-      when initial_value.is_a?(Integer)
-        accumulator += initial_value
-        my_each do |element|
-          accumulator = yield(accumulator, element)
-        end
-        accumulator
-      end
-      accumulator
-
-    elsif initial_value.nil? && sym.nil? && block_given?
-      result = to_a[0]
-      to_a[1..].my_each do |element|
-        result = yield(result, element)
-      end
-      result
-
-    elsif !initial_value.nil? && sym.nil? && !block_given?
-      result = to_a[0]
-      my_each do |element|
-        result = result.send(initial_value, element)
-      end
-      result
-    end
+    init
   end
 end
 
