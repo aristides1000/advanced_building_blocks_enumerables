@@ -668,6 +668,62 @@ RSpec.describe Enumerable do
       end
     end
   end
+
+  context 'Testing #my_inject' do
+    describe 'for arrays' do
+      it 'when the elements are Numbers' do
+        standard_result = my_numbers_array.inject { |v| v * v }
+        my_result = my_numbers_array.my_inject { |v| v * v }
+        expect(my_result).to eql(standard_result)
+      end
+
+      it 'when the elements are Strings' do
+        standard_result = my_chars_array.inject { |v| "#{v}!" }
+        my_result = my_chars_array.my_inject { |v| "#{v}!" }
+        expect(my_result).to eql(standard_result)
+      end
+
+      it 'when the array is empty' do
+        standard_result = [].inject { |v| v * v }
+        my_result = [].my_inject { |v| v * v }
+        expect(my_result).to eql(standard_result)
+      end
+
+      xit 'without a block' do
+        standard_result = my_numbers_array.map.class
+        my_result = my_numbers_array.my_map.class
+        expect(my_result).to eql(standard_result)
+      end
+    end
+
+    describe 'for hashes' do
+      xit 'when the hash has numbers and strings as values' do
+        standard_result = my_hash.map { |i, v| "#{i} -> #{v}" }
+        my_result = my_hash.my_map { |i, v| "#{i} -> #{v}" }
+        expect(my_result).to eql(standard_result)
+      end
+
+      xit 'without a block' do
+        standard_result = my_hash.map.class
+        my_result = my_hash.my_map.class
+        expect(my_result).to eql(standard_result)
+      end
+    end
+
+    describe 'for ranges' do
+      xit 'with numbers' do
+        standard_result = my_range.map { |v| 2 * v }
+        my_result = my_range.my_map { |v| 2 * v }
+        expect(my_result).to eql(standard_result)
+      end
+
+      xit 'without a block' do
+        standard_result = my_range.map.class
+        my_result = my_range.my_map.class
+        expect(my_result).to eql(standard_result)
+      end
+    end
+  end
 end
 
 # rubocop:enable Metrics/BlockLength
