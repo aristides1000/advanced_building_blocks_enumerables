@@ -63,12 +63,12 @@ RSpec.describe Enumerable do
     describe 'for hashes' do
       it 'when the hash has numbers and strings as values' do
         standard_result = []
-        my_hash.each do |v|
-          standard_result << v + v
+        my_hash.each do |i, v|
+          standard_result << "The #{i} is #{v.to_s.capitalize}"
         end
         my_result = []
-        my_hash.my_each do |v|
-          my_result << v + v
+        my_hash.my_each do |i, v|
+          my_result << "The #{i} is #{v.to_s.capitalize}"
         end
         expect(my_result).to eql(standard_result)
       end
@@ -206,6 +206,78 @@ RSpec.describe Enumerable do
       it 'without a block' do
         standard_result = my_range.each_with_index.class
         my_result = my_range.my_each_with_index.class
+        expect(my_result).to eql(standard_result)
+      end
+    end
+  end
+
+  context 'Testing #my_select' do
+    describe 'for arrays' do
+      it 'when the elements are Numbers' do
+        standard_result = my_numbers_array.select do |v|
+          v.even?
+        end
+        my_result = my_numbers_array.my_select do |v|
+          v.even?
+        end
+        expect(my_result).to eql(standard_result)
+      end
+
+      it 'when the elements are Strings' do
+        standard_result = my_chars_array.select do |v|
+          v.include? 'a'
+        end
+        my_result = my_chars_array.my_select do |v|
+          v.include? 'a'
+        end
+        expect(my_result).to eql(standard_result)
+      end
+
+      it 'when the array is empty' do
+        standard_result = [].select do |v|
+          v.positive?
+        end
+        my_result = [].my_select do |v|
+          v.positive?
+        end
+        expect(my_result).to eql(standard_result)
+      end
+
+      it 'without a block' do
+        standard_result = my_numbers_array.select.class
+        my_result = my_numbers_array.my_select.class
+        expect(my_result).to eql(standard_result)
+      end
+    end
+
+    describe 'for hashes' do
+      it 'when the hash has numbers and strings as values' do
+        standard_result = my_hash.select do |_, v|
+          v.is_a? String
+        end
+        my_result = my_hash.my_select do |_, v|
+          v.is_a? String
+        end
+        expect(my_result).to eql(standard_result)
+      end
+
+      it 'without a block' do
+        standard_result = my_hash.select.class
+        my_result = my_hash.my_select.class
+        expect(my_result).to eql(standard_result)
+      end
+    end
+
+    describe 'for ranges' do
+      it 'with numbers' do
+        standard_result = my_range.select { |v| v > 6 }
+        my_result = my_range.my_select { |v| v > 6 }
+        expect(my_result).to eql(standard_result)
+      end
+
+      it 'without a block' do
+        standard_result = my_range.select.class
+        my_result = my_range.my_select.class
         expect(my_result).to eql(standard_result)
       end
     end
