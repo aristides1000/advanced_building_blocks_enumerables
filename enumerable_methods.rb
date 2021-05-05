@@ -93,18 +93,20 @@ module Enumerable
 
   def my_any?(parameter = nil)
     if block_given? && parameter.nil?
+      result = false
       my_each do |element|
-        return true unless yield element || !element.nil? || element == true
+        result ||= yield(element)
       end
+      return result
     elsif !block_given? && !parameter.nil?
       my_each do |element|
         if parameter.instance_of?(Regexp)
-          if parameter.match(element)
+          if parameter.match(element.to_s)
             return true
           else
             i = 0
             my_each do |element|
-              i += 1 if parameter.match(element)
+              i += 1 if parameter.match(element.to_s)
             end
             return false if i.zero?
           end
@@ -118,8 +120,9 @@ module Enumerable
         end
       end
     elsif !block_given?
-      return false if empty?
-      return true unless empty?
+      return !empty? unless is_a?(Range)
+
+      true
     end
     true
   end
