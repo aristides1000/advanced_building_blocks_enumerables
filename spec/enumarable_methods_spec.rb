@@ -671,55 +671,73 @@ RSpec.describe Enumerable do
 
   context 'Testing #my_inject' do
     describe 'for arrays' do
-      it 'when the elements are Numbers' do
-        standard_result = my_numbers_array.inject { |v| v * v }
-        my_result = my_numbers_array.my_inject { |v| v * v }
+      it 'when the elements are Numbers and a block is given' do
+        standard_result = my_numbers_array.inject { |acc, v| acc + v }
+        my_result = my_numbers_array.my_inject { |acc, v| acc + v }
+        expect(my_result).to eql(standard_result)
+      end
+
+      it 'when the elements are Numbers and a block and an intial are given' do
+        standard_result = my_numbers_array.inject(100) { |acc, v| acc + v }
+        my_result = my_numbers_array.my_inject(100) { |acc, v| acc + v }
+        expect(my_result).to eql(standard_result)
+      end
+
+      it 'when the elements are Numbers and an initial and a symbol are given' do
+        standard_result = my_numbers_array.inject(100, :+)
+        my_result = my_numbers_array.my_inject(100, :+)
+        expect(my_result).to eql(standard_result)
+      end
+
+      it 'when the elements are Numbers and a symbol is given' do
+        standard_result = my_numbers_array.inject(:+)
+        my_result = my_numbers_array.my_inject(:+)
         expect(my_result).to eql(standard_result)
       end
 
       it 'when the elements are Strings' do
-        standard_result = my_chars_array.inject { |v| "#{v}!" }
-        my_result = my_chars_array.my_inject { |v| "#{v}!" }
+        standard_result = my_chars_array.inject { |acc, v| "#{acc}-#{v}!" }
+        my_result = my_chars_array.my_inject { |acc, v| "#{acc}-#{v}!" }
         expect(my_result).to eql(standard_result)
       end
 
       it 'when the array is empty' do
-        standard_result = [].inject { |v| v * v }
-        my_result = [].my_inject { |v| v * v }
-        expect(my_result).to eql(standard_result)
-      end
-
-      xit 'without a block' do
-        standard_result = my_numbers_array.map.class
-        my_result = my_numbers_array.my_map.class
+        standard_result = [].inject { |acc, v| acc + v }
+        my_result = [].my_inject { |acc, v| acc + v }
         expect(my_result).to eql(standard_result)
       end
     end
 
     describe 'for hashes' do
-      xit 'when the hash has numbers and strings as values' do
-        standard_result = my_hash.map { |i, v| "#{i} -> #{v}" }
-        my_result = my_hash.my_map { |i, v| "#{i} -> #{v}" }
+      it 'when the hash has numbers and strings as values' do
+        standard_result = my_hash.inject { |acc, v| "#{acc} -> #{v}" }
+        my_result = my_hash.my_inject { |acc, v| "#{acc} -> #{v}" }
         expect(my_result).to eql(standard_result)
       end
 
-      xit 'without a block' do
-        standard_result = my_hash.map.class
-        my_result = my_hash.my_map.class
+      it 'when the hash has numbers and strings as values and an initial value is provided' do
+        standard_result = my_hash.inject(%w[a b]) { |acc, v| "#{acc} -> #{v}" }
+        my_result = my_hash.my_inject(%w[a b]) { |acc, v| "#{acc} -> #{v}" }
         expect(my_result).to eql(standard_result)
       end
     end
 
     describe 'for ranges' do
-      xit 'with numbers' do
-        standard_result = my_range.map { |v| 2 * v }
-        my_result = my_range.my_map { |v| 2 * v }
+      it 'with numbers and a block is given' do
+        standard_result = my_range.inject { |acc, v| acc * v }
+        my_result = my_range.my_inject { |acc, v| acc * v }
         expect(my_result).to eql(standard_result)
       end
 
-      xit 'without a block' do
-        standard_result = my_range.map.class
-        my_result = my_range.my_map.class
+      it 'with numbers and a block and an intial value are given' do
+        standard_result = my_range.inject(100) { |acc, v| acc * v }
+        my_result = my_range.my_inject(100) { |acc, v| acc * v }
+        expect(my_result).to eql(standard_result)
+      end
+
+      it 'with numbers and without a block, but an intial value and a symbol are given' do
+        standard_result = my_range.inject(100, :*)
+        my_result = my_range.my_inject(100, :*)
         expect(my_result).to eql(standard_result)
       end
     end
