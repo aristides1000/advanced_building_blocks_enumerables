@@ -541,7 +541,77 @@ RSpec.describe Enumerable do
     end
   end
 
-  
+  context 'Testing #my_count' do
+    describe 'for arrays' do
+      it 'when the elements are Numbers' do
+        standard_result = my_numbers_array.count do |v|
+          v.even?
+        end
+        my_result = my_numbers_array.my_count do |v|
+          v.even?
+        end
+        expect(my_result).to eql(standard_result)
+      end
+
+      it 'when the elements are Strings' do
+        standard_result = my_chars_array.count do |v|
+          v.include? 'a'
+        end
+        my_result = my_chars_array.my_count do |v|
+          v.include? 'a'
+        end
+        expect(my_result).to eql(standard_result)
+      end
+
+      it 'when the array is empty' do
+        standard_result = [].count do |v|
+          v.positive?
+        end
+        my_result = [].my_count do |v|
+          v.positive?
+        end
+        expect(my_result).to eql(standard_result)
+      end
+
+      it 'without a block' do
+        standard_result = my_numbers_array.count
+        my_result = my_numbers_array.my_count
+        expect(my_result).to eql(standard_result)
+      end
+    end
+
+    describe 'for hashes' do
+      it 'when the hash has numbers and strings as values' do
+        standard_result = my_hash.count do |_, v|
+          v.is_a? String
+        end
+        my_result = my_hash.my_count do |_, v|
+          v.is_a? String
+        end
+        expect(my_result).to eql(standard_result)
+      end
+
+      it 'without a block' do
+        standard_result = my_hash.count
+        my_result = my_hash.my_count
+        expect(my_result).to eql(standard_result)
+      end
+    end
+
+    describe 'for ranges' do
+      it 'with numbers' do
+        standard_result = my_range.count { |v| v > 6 }
+        my_result = my_range.my_count { |v| v > 6 }
+        expect(my_result).to eql(standard_result)
+      end
+
+      it 'without a block' do
+        standard_result = my_range.count
+        my_result = my_range.my_count
+        expect(my_result).to eql(standard_result)
+      end
+    end
+  end
 end
 
 # rubocop:enable Metrics/BlockLength
