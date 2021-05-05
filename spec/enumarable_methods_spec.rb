@@ -368,6 +368,92 @@ RSpec.describe Enumerable do
       end
     end
   end
+
+  context 'Testing #my_any?' do
+    describe 'for arrays' do
+      it 'when the elements are Numbers, with a pattern (positive result)' do
+        standard_result = my_numbers_array.any?(Numeric)
+        my_result = my_numbers_array.my_any?(Numeric)
+        expect(my_result).to eql(standard_result)
+      end
+
+      it 'when the elements are Numbers, with a pattern (negative result)' do
+        standard_result = my_numbers_array.any?(String)
+        my_result = my_numbers_array.my_any?(String)
+        expect(my_result).to eql(standard_result)
+      end
+
+      it 'when the elements are Numbers, with a block (positive result)' do
+        standard_result = my_numbers_array.any? { |number| number > 8 }
+        my_result = my_numbers_array.my_any? { |number| number > 8 }
+        expect(my_result).to eql(standard_result)
+      end
+
+      it 'when the elements are Numbers, with a block (negative result)' do
+        standard_result = my_numbers_array.any? { |number| number > 10 }
+        my_result = my_numbers_array.my_any? { |number| number > 10 }
+        expect(my_result).to eql(standard_result)
+      end
+
+      it 'when the array is empty' do
+        standard_result = [].any?
+        my_result = [].my_any?
+        expect(my_result).to eql(standard_result)
+      end
+
+      it 'when the elements are Strings (positive result)' do
+        standard_result = my_chars_array.any? { |word| word.include?('b') }
+        my_result = my_chars_array.my_any?{ |word| word.include?('b') }
+        expect(my_result).to eql(standard_result)
+      end
+
+      it 'when the elements are Strings (negative result)' do
+        standard_result = my_chars_array.any? { |word| word.include?('z') }
+        my_result = my_chars_array.my_any?{ |word| word.include?('z') }
+        expect(my_result).to eql(standard_result)
+      end
+
+      it 'without a block' do
+        standard_result = my_numbers_array.any?(/a/)
+        my_result = my_numbers_array.my_any?(/a/)
+        expect(my_result).to eql(standard_result)
+      end
+    end
+
+    describe 'for hashes' do
+      it 'when the hash has numbers and strings as values (negative result)' do
+        standard_result = my_hash.any?(String)
+        my_result = my_hash.my_any?(String)
+        expect(my_result).to eql(standard_result)
+      end
+
+      it 'when the hash has numbers and strings as values (positive result)' do
+        standard_result = my_hash.any?(Array)
+        my_result = my_hash.my_any?(Array)
+        expect(my_result).to eql(standard_result)
+      end
+
+      it 'without a block' do
+        standard_result = my_hash.any?.class
+        my_result = my_hash.my_any?.class
+        expect(my_result).to eql(standard_result)
+      end
+    end
+
+    describe 'for ranges' do
+      it 'with numbers' do
+        standard_result = my_range.any? { |v| v > 6 }
+        my_result = my_range.my_any? { |v| v > 6 }
+        expect(my_result).to eql(standard_result)
+      end
+
+      it 'without a block' do
+        standard_result = my_range.any?
+        my_result = my_range.my_any?
+        expect(my_result).to eql(standard_result)
+      end
+    end
+  end
 end
 
 # rubocop:enable Metrics/BlockLength
