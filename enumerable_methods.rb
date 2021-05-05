@@ -91,11 +91,11 @@ module Enumerable
     true
   end
 
-  def my_any?(parameter = nil)
+  def my_any?(parameter = nil, &block)
     if block_given? && parameter.nil?
       result = false
       my_each do |element|
-        result ||= yield(element)
+        result ||= block.call(element)
       end
       return result
     elsif !block_given? && !parameter.nil?
@@ -127,31 +127,8 @@ module Enumerable
     true
   end
 
-  def my_none?(parameter = nil)
-    if block_given? && parameter.nil?
-      my_each do |element|
-        return false if yield element || !element.nil? || element == true
-      end
-    elsif !block_given? && !parameter.nil?
-      my_each do |element|
-        if parameter.instance_of?(Regexp)
-          return false unless parameter.match(element)
-        elsif parameter.is_a?(Class)
-          return false unless [element.class, element.class.superclass].include?(parameter)
-        else
-          my_each do |element|
-            return false if element == parameter
-          end
-        end
-      end
-    elsif !block_given?
-      unless empty?
-        my_each do |element|
-          return false if element == true
-        end
-      end
-    end
-    true
+  def my_none?(parameter = nil, &block)
+    return !my_any?(parameter, &block)
   end
 
   def my_count(parameter = 'empty')
