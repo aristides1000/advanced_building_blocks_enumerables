@@ -164,46 +164,6 @@ module Enumerable
     array
   end
 
-  # def my_inject(initial_value = nil, sym = nil)
-  #   accumulator = 0
-
-  #   raise LocalJumpError.new 'no block given' if initial_value.nil? && sym.nil? && !block_given?
-
-  #   my_each do |element|
-  #     accumulator = self[0] if element.is_a?(String)
-  #   end
-
-  #   if !initial_value.nil? && sym.nil? && block_given?
-  #     case
-  #     when initial_value.is_a?(Symbol)
-  #       my_each do |_element|
-  #         accumulator = accumulator.method(initial_value).call(obj)
-  #       end
-  #     when initial_value.is_a?(Integer)
-  #       accumulator += initial_value
-  #       my_each do |element|
-  #         accumulator = yield(accumulator, element)
-  #       end
-  #       accumulator
-  #     end
-  #     accumulator
-
-  #   elsif initial_value.nil? && sym.nil? && block_given?
-  #     result = to_a[0]
-  #     to_a[1..].my_each do |element|
-  #       result = yield(result, element)
-  #     end
-  #     result
-
-  #   elsif !initial_value.nil? && sym.nil? && !block_given?
-  #     result = to_a[0]
-  #     my_each do |element|
-  #       result = result.send(initial_value, element)
-  #     end
-  #     result
-  #   end
-  # end
-
   def my_inject(init = nil, sym = nil, &block)
     enum = to_a
     raise(LocalJumpError, 'no block given') if init.nil? && sym.nil? && !block_given?
