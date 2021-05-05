@@ -22,7 +22,7 @@ module Enumerable
       end
     else
       while i < array.length
-        yield(array[i][0], array[i][1])
+        yield([array[i][0], array[i][1]])
         i += 1
       end
     end
@@ -75,7 +75,7 @@ module Enumerable
     elsif !block_given? && !parameter.nil?
       my_each do |element|
         if parameter.instance_of?(Regexp)
-          return false unless parameter.match(element)
+          return false unless parameter.match(element.to_s)
         elsif parameter.is_a?(Class)
           return false unless [element.class, element.class.superclass].include?(parameter)
         elsif element != parameter
