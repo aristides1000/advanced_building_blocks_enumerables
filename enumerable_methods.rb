@@ -2,7 +2,6 @@
 # rubocop:disable Metrics/PerceivedComplexity
 # rubocop:disable Metrics/CyclomaticComplexity
 # rubocop:disable Metrics/MethodLength
-# rubocop:disable Style/EmptyCaseCondition
 # rubocop:disable Style/GuardClause
 # rubocop:disable Lint/ShadowingOuterLocalVariable
 # rubocop:disable Metrics/BlockNesting
@@ -10,20 +9,23 @@
 
 module Enumerable
   def my_each
-    return to_enum(:my_each) unless block_given?
+    return to_enum unless block_given?
 
-    if instance_of?(Array)
-      element = self
-    elsif instance_of?(Range) || Hash
-      element = to_a
-    end
+    array = to_a
 
     i = 0
-    loop do
-      yield(element[i])
-      i += 1
-      break if i == element.length
+    if is_a?(Array) || is_a?(Range)
+      while i < array.length
+        yield(array[i])
+        i += 1
+      end
+    else
+      while i < array.length
+        yield([array[i][0], array[i][1]])
+        i += 1
+      end
     end
+
     self
   end
 
@@ -38,9 +40,10 @@ module Enumerable
 
     i = 0
     loop do
+      break if i == element.length
+
       yield(element[i], i)
       i += 1
-      break if i == element.length
     end
     self
   end
@@ -48,11 +51,19 @@ module Enumerable
   def my_select
     return to_enum(:my_select) unless block_given?
 
-    array = []
-    my_each do |element|
-      array.push(element) if yield element
+    if is_a?(Array) || is_a?(Range)
+      array = []
+      my_each do |element|
+        array.push(element) if yield element
+      end
+      array
+    else
+      hash = {}
+      my_each do |i, v|
+        hash[i] = v if yield(i, v)
+      end
+      hash
     end
-    array
   end
 
   def my_all?(parameter = nil)
@@ -63,7 +74,7 @@ module Enumerable
     elsif !block_given? && !parameter.nil?
       my_each do |element|
         if parameter.instance_of?(Regexp)
-          return false unless parameter.match(element)
+          return false unless parameter.match(element.to_s)
         elsif parameter.is_a?(Class)
           return false unless [element.class, element.class.superclass].include?(parameter)
         elsif element != parameter
@@ -79,20 +90,22 @@ module Enumerable
     true
   end
 
-  def my_any?(parameter = nil)
+  def my_any?(parameter = nil, &block)
     if block_given? && parameter.nil?
+      result = false
       my_each do |element|
-        return true unless yield element || !element.nil? || element == true
+        result ||= block.call(element)
       end
+      return result
     elsif !block_given? && !parameter.nil?
       my_each do |element|
         if parameter.instance_of?(Regexp)
-          if parameter.match(element)
+          if parameter.match(element.to_s)
             return true
           else
             i = 0
             my_each do |element|
-              i += 1 if parameter.match(element)
+              i += 1 if parameter.match(element.to_s)
             end
             return false if i.zero?
           end
@@ -106,37 +119,15 @@ module Enumerable
         end
       end
     elsif !block_given?
-      return false if empty?
-      return true unless empty?
+      return !empty? unless is_a?(Range)
+
+      true
     end
     true
   end
 
-  def my_none?(parameter = nil)
-    if block_given? && parameter.nil?
-      my_each do |element|
-        return false if yield element || !element.nil? || element == true
-      end
-    elsif !block_given? && !parameter.nil?
-      my_each do |element|
-        if parameter.instance_of?(Regexp)
-          return false unless parameter.match(element)
-        elsif parameter.is_a?(Class)
-          return false unless [element.class, element.class.superclass].include?(parameter)
-        else
-          my_each do |element|
-            return false if element == parameter
-          end
-        end
-      end
-    elsif !block_given?
-      unless empty?
-        my_each do |element|
-          return false if element == true
-        end
-      end
-    end
-    true
+  def my_none?(parameter = nil, &block)
+    !my_any?(parameter, &block)
   end
 
   def my_count(parameter = 'empty')
@@ -173,44 +164,23 @@ module Enumerable
     array
   end
 
-  def my_inject(initial_value = nil, sym = nil)
-    accumulator = 0
+  def my_inject(init = nil, sym = nil, &block)
+    enum = to_a
+    raise(LocalJumpError, 'no block given') if init.nil? && sym.nil? && !block_given?
+    return init if enum.empty? && block_given?
 
-    return 'no block given (LocalJumpError)' if initial_value.nil? && sym.nil? && !block_given?
-
-    my_each do |element|
-      accumulator = self[0] if element.is_a?(String)
+    if block_given?
+      if init.nil?
+        init = enum.drop(1).my_inject(enum[0], &block)
+      else
+        enum.my_each { |v| init = block.call(init, v) }
+      end
+    else
+      sym, init = init, sym if sym.nil?
+      return enum.my_inject(init) { |a, b| a.send(sym, b) }
     end
 
-    if !initial_value.nil? && sym.nil? && block_given?
-      case
-      when initial_value.is_a?(Symbol)
-        my_each do |_element|
-          accumulator = accumulator.method(initial_value).call(obj)
-        end
-      when initial_value.is_a?(Integer)
-        accumulator += initial_value
-        my_each do |element|
-          accumulator = yield(accumulator, element)
-        end
-        accumulator
-      end
-      accumulator
-
-    elsif initial_value.nil? && sym.nil? && block_given?
-      result = to_a[0]
-      to_a[1..].my_each do |element|
-        result = yield(result, element)
-      end
-      result
-
-    elsif !initial_value.nil? && sym.nil? && !block_given?
-      result = to_a[0]
-      my_each do |element|
-        result = result.send(initial_value, element)
-      end
-      result
-    end
+    init
   end
 end
 
@@ -222,7 +192,6 @@ end
 # rubocop:enable Metrics/PerceivedComplexity
 # rubocop:enable Metrics/CyclomaticComplexity
 # rubocop:enable Metrics/MethodLength
-# rubocop:enable Style/EmptyCaseCondition
 # rubocop:enable Style/GuardClause
 # rubocop:enable Lint/ShadowingOuterLocalVariable
 # rubocop:enable Metrics/BlockNesting
